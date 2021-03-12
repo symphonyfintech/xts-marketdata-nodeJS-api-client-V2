@@ -1,5 +1,3 @@
-Test Commit
-
 # xts-marketdata-nodeJS-api-client-V2
 
 Welcome to the XTS-MarketData-API SDK, This repository is Official Node.js library for Symphony XTS-MarketData-API.
