@@ -1,5 +1,5 @@
 {
-  "name": "xts-marketdata-api",
+  "name": "@symphonyfintech/xts-marketdata-api",
   "version": "3.0.0",
   "description": "The official JS client library for the Symphony Fintech MarketData API's",
   "main": "./lib/",
@@ -23,6 +23,13 @@
   },
   "directories": {
     "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/symphonyfintech/xts-marketdata-nodeJS-api-client-V2"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/symphonyfintech"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
