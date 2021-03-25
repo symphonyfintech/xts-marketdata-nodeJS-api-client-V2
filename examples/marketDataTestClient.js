@@ -1,6 +1,6 @@
 //Accessing the XtsMarketDataAPI and XtsMarketDataWS from xts-marketdata-api library
 
-var XtsMarketDataAPI = require('xts-marketdata-api').xtsMarketDataAPI;
+var XtsMarketDataAPI = require('xts-marketdata-api').XtsMarketDataAPI;
 var XtsMarketDataWS = require('xts-marketdata-api').WS;
 
 //If you want to run the example directly with the code Please uncomment line 7 and 8 and comment line 3 and 4
