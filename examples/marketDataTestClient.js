@@ -252,8 +252,8 @@ var searchInstrument = async function (searchInstrumentRequest) {
   return response;
 };
 
-var clientConfig = async function (clientConfigRequest) {
-  let response = await xtsMarketDataAPI.clientConfig(clientConfigRequest);
+var clientConfig = async function () {
+  let response = await xtsMarketDataAPI.clientConfig();
   console.log(response);
   return response;
 };

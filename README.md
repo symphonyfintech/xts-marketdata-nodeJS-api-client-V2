@@ -38,9 +38,8 @@ call the login API to generate the token
 
 ```js
 var loginRequest = {
-  password: 'Abcd@123',
-  publicKey: '5a75a3616cabe678',
-  source: 'WEBAPI',
+  secretKey: 'Drty585#w',
+  appKey: 'c4e15efa9c97e489f80873',
 };
 
 let logIn = await xtsMarketDataAPI.logIn(loginRequest);
@@ -50,11 +49,7 @@ Once the token is generated you can call any api provided in the documentation. 
 Below is the sample Code snippet which calls the client config API.
 
 ```js
-let clientConfigRequest = {
-  source: source,
-  userID: userID,
-};
-let response = await xtsMarketDataAPI.clientConfig(clientConfigRequest);
+let response = await xtsMarketDataAPI.clientConfig();
 
 console.log(response);
 ```
@@ -68,50 +63,78 @@ After token is generated, you can access the socket component and instantiate th
 var XtsMarketDataWS = require('xts-marketdata-api').WS;
 xtsMarketDataWS  = new XtsMarketDataWS(“https://developers.symphonyfintech.in”);
 var socketInitRequest = {
-	userID: “AJ01”,
-	token: logIn.result.token,   // Token Generated after successful LogIn
-	publishFormat: "JSON",
-	broadcastMode: "Full"
-}
+  userID: 'XYZ',
+  publishFormat: 'JSON',
+  broadcastMode: 'Full',
+  token: logIn.result.token, // Token Generated after successful LogIn
+};
 xtsMarketDataWS.init(socketInitRequest);
 ```
 
 You can now register events to listen to the real time market data events and will be receiving the json objects in the response.
 
 ```js
-xtsMarketDataWS.onConnect((connectData) => {
-  console.log(connectData);
-});
-xtsMarketDataWS.onJoined((joinedData) => {
-  console.log(joinedData);
-});
-xtsMarketDataWS.onError((errorData) => {
-  console.log(errorData);
-});
-xtsMarketDataWS.onDisconnect((disconnectData) => {
-  console.log(disconnectData);
-});
-xtsMarketDataWS.onMarketDepthEvent((marketDepthData) => {
-  console.log(marketDepthData);
-});
-xtsMarketDataWS.onOpenInterestEvent((openInterestData) => {
-  console.log(openInterestData);
-});
-xtsMarketDataWS.onIndexDataEvent((indexData) => {
-  console.log(indexData);
-});
-xtsMarketDataWS.onMarketDepth100Event((marketDepth100Data) => {
-  console.log(marketDepth100Data);
-});
-xtsMarketDataWS.onCandleDataEvent((candleData) => {
-  console.log(candleData);
-});
-xtsMarketDataWS.onLogout((logoutData) => {
-  console.log(logoutData);
-});
+var registerEvents = async function () {
+  //instantiating the listeners for all event related data
+
+  //"connect" event listener
+  xtsMarketDataWS.onConnect((connectData) => {
+    console.log(connectData);
+  });
+
+  //"joined" event listener
+  xtsMarketDataWS.onJoined((joinedData) => {
+    console.log(joinedData);
+  });
+
+  //"error" event listener
+  xtsMarketDataWS.onError((errorData) => {
+    console.log(errorData);
+  });
+
+  //"disconnect" event listener
+  xtsMarketDataWS.onDisconnect((disconnectData) => {
+    console.log(disconnectData);
+  });
+
+  //"marketDepthEvent" event listener
+  xtsMarketDataWS.onMarketDepthEvent((marketDepthData) => {
+    console.log(marketDepthData);
+  });
+
+  //"openInterestEvent" event listener
+  xtsMarketDataWS.onOpenInterestEvent((openInterestData) => {
+    console.log(openInterestData);
+  });
+
+  //"indexDataEvent" event listener
+  xtsMarketDataWS.onIndexDataEvent((indexData) => {
+    console.log(indexData);
+  });
+
+  //"marketDepth100Event" event listener
+  xtsMarketDataWS.onMarketDepth100Event((marketDepth100Data) => {
+    console.log(marketDepth100Data);
+  });
+
+  //"instrumentPropertyChangeEvent" event listener
+  xtsMarketDataWS.onInstrumentPropertyChangeEvent((propertyChangeData) => {
+    console.log(propertyChangeData);
+  });
+
+  //"candleDataEvent" event listener
+  xtsMarketDataWS.onCandleDataEvent((candleData) => {
+    console.log(candleData);
+  });
+
+  // //"logout" event listener
+  xtsMarketDataWS.onLogout((logoutData) => {
+    console.log(logoutData);
+  });
+};
 ```
 
-## Detailed explanation of API and socket related events
+## Detailed explanation of API
 
 Below is the brief information related to api’s provided by XTS-marketdata-API SDK.
 
@@ -122,22 +145,19 @@ Below is the brief information related to api’s provided by XTS-marketdata-API
 Calls POST /instruments/subscription.
 
 ```js
-let response = await xtsMarketDataAPI.subscription(let subscriptionRequest = {
-        userID: userID,
-        clientID: userID,
-        source: source,
-        instruments: [
-            {
-                exchangeSegment: xtsMarketDataAPI.exchangeSegments.NSECM,
-                exchangeInstrumentID: 22 // can use "ACC-EQ" refer to online documentation
-            },
-            {
-                exchangeSegment: xtsMarketDataAPI.exchangeSegments.NSECM,
-                exchangeInstrumentID: 11536
-            }
-        ],
-        marketDataPort: xtsMarketDataAPI.marketDataPorts.marketDepthEvent
-    });
+let response = await xtsMarketDataAPI.subscription({
+    instruments: [
+      {
+        exchangeSegment: xtsMarketDataAPI.exchangeSegments.NSECM,
+        exchangeInstrumentID: 22,
+      },
+      {
+        exchangeSegment: xtsMarketDataAPI.exchangeSegments.NSECM,
+        exchangeInstrumentID: 11536,
+      },
+    ],
+    xtsMessageCode: 1502,
+  };
 ```
 
 ## unSubscription
@@ -146,9 +166,6 @@ Calls PUT /instruments/subscription.
 
 ```js
 let response = await xtsMarketDataAPI.unSubscription({
-  userID: userID,
-  clientID: userID,
-  source: source,
   instruments: [
     {
       exchangeSegment: xtsMarketDataAPI.exchangeSegments.NSECM,
@@ -159,7 +176,7 @@ let response = await xtsMarketDataAPI.unSubscription({
       exchangeInstrumentID: 11536,
     },
   ],
-  marketDataPort: xtsMarketDataAPI.marketDataPorts.marketDepthEvent,
+  xtsMessageCode: 1502,
 });
 ```
 
@@ -169,9 +186,7 @@ Calls POST /instruments/quotes.
 
 ```js
 let response = await xtsMarketDataAPI.getQuotes({
-  userID: userID,
-  clientID: userID,
-  source: source,
+  isTradeSymbol: isTradeSymbol,
   instruments: [
     {
       exchangeSegment: xtsMarketDataAPI.exchangeSegments.NSECM,
@@ -182,8 +197,8 @@ let response = await xtsMarketDataAPI.getQuotes({
       exchangeInstrumentID: 11536,
     },
   ],
-  marketDataPort: xtsMarketDataAPI.marketDataPorts.marketDepthEvent,
-  publishFormat: xtsMarketDataAPI.publishFormat.JSON,
+  xtsMessageCode: 1502,
+  publishFormat: 'JSON',
 });
 ```
 
@@ -192,10 +207,7 @@ let response = await xtsMarketDataAPI.getQuotes({
 Calls POST /config/clientConfig.
 
 ```js
-let response = await xtsMarketDataAPI.clientConfig({
-  source: source,
-  userID: userID,
-});
+let response = await xtsMarketDataAPI.clientConfig();
 ```
 
 ## search API
@@ -206,12 +218,14 @@ Calls POST /search/instrumentsbyid.
 
 ```js
 let response = await xtsMarketDataAPI.searchInstrumentsById({
-        source: source,
-        userID: userID,
-        instruments: [
-            { exchangeSegment: xtsMarketDataAPI.exchangeSegments.NSECM, exchangeInstrumentID: "3045" }
-        ]
-    }
+  source: 'WEBAPI',
+  isTradeSymbol: false,
+  instruments: [
+    {
+      exchangeSegment: xtsMarketDataAPI.exchangeSegments.NSECM,
+      exchangeInstrumentID: '3045',
+    },
+  ],
 });
 ```
 
@@ -223,24 +237,7 @@ Calls POST /search/instruments.
 let response = await xtsMarketDataAPI.searchInstrument({
   searchString: 'REL',
   source: source,
-  userID: userID,
 });
-```
-
-Below is the brief information related to streaming events provided by XTS-Interactive-API SDK.
-
-```js
-xtsMarketDataWS.init(socketInitRequest); // Init the socket instance
-xtsMarketDataWS.onConnect((connectData) => {}); //"connect" event listener
-xtsMarketDataWS.onJoined((joinedData) => {}); //"joined" event listener
-xtsMarketDataWS.onError((errorData) => {}); //"error" event listener
-xtsMarketDataWS.onDisconnect((disconnectData) => {}); //"disconnect" event listener
-xtsMarketDataWS.onMarketDepthEvent((marketDepthData) => {}); //"marketDepthEvent" event listener
-xtsMarketDataWS.onOpenInterestEvent((openInterestData) => {}); //"openInterestEvent" event listener
-xtsMarketDataWS.onIndexDataEvent((indexData) => {}); //"indexDataEvent" event listener
-xtsMarketDataWS.onMarketDepth100Event((marketDepth100Data) => {}); //"marketDepth100Event" event listener
-xtsMarketDataWS.onCandleDataEvent((candleData) => {}); //"candleDataEvent" event listener
-xtsMarketDataWS.onLogout((logoutData) => {}); //"logout" event listener
 ```
 
 We do have a trading API component which will provide the trading capability of our application. For more info please check the following link.
