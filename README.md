@@ -32,7 +32,7 @@ Creating the instance of xtsMarketDataAPI
 
 ```js
 xtsMarketDataAPI = new XtsMarketDataAPI(
-  'https://developers.symphonyfintech.in'
+  'https://developers.symphonyfintech.in/marketdata'
 );
 ```
 
@@ -63,7 +63,7 @@ After token is generated, you can access the socket component and instantiate th
 
 ```js
 var XtsMarketDataWS = require('xts-marketdata-api').WS;
-xtsMarketDataWS = new XtsMarketDataWS('https://developers.symphonyfintech.in');
+xtsMarketDataWS = new XtsMarketDataWS('https://developers.symphonyfintech.in/marketdata');
 var socketInitRequest = {
   userID: 'XYZ',
   publishFormat: 'JSON',

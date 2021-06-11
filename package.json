@@ -1,6 +1,6 @@
 {
   "name": "xts-marketdata-api",
-  "version": "3.0.6",
+  "version": "3.0.7",
   "description": "The official JS client library for the Symphony Fintech MarketData API's",
   "main": "./lib/",
   "keywords": [
