@@ -16,7 +16,7 @@ let url = config.url;
 let userID = null;
 let isTradeSymbol = false;
 
-//xtsInteractive for API calls and xtsMarketDataWS for events related functionality
+//xtsInteractive for API calls and xtsMarketDataWS for events related functionalities
 var xtsMarketDataAPI = null;
 var xtsMarketDataWS = null;
 
